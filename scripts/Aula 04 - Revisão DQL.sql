@@ -3,10 +3,11 @@ select * from funcionario; -- esse comando executa uma busca simples para retorn
 select pnome, unome, numero_departamento from funcionario; -- esse comando executa uma busca específica para retornar dados especificos da tabela selecionada.
 
 select pnome || ' ' || unome, numero_departamento from funcionario;
+-- o comando || concatena duas strings ou seja, acima aparecerá o nome e sobrenome eu uma coluna só.
 
 -- alias
-select pnome || ' ' || unome as "Nome Completo", numero_departamento as "Dep" from funcionario;
-select pnome || ' ' || unome nome, numero_departamento dep from funcionario;
+select pnome || ' ' || unome as "Nome Completo", numero_departamento as "Dep" from funcionario; -- forma melhor de realizr a concatenação.
+select pnome || ' ' || unome nome, numero_departamento dep from funcionario; -- outra forma de realizar, omitindo o "as"
 
 select all numero_departamento from funcionario;
 -- Exibir valores distintos
