@@ -43,8 +43,9 @@ on delete no action -- impede que um departamento seja apagado se houver funcion
 on update cascade; -- Se o número de um departamento for alterado na tabela departamento, o banco atualiza automaticamente o numero_departamento de todos os funcionários associados.
 SELECT numero_departamento, -- Select: seleciona a coluna da tabela departamento.
     COUNT(*) AS quantidade_funcionarios -- Conta a quantidade total de linhas (funcionários) e nomeia a coluna.
-    group by numero_departamento
+
 FROM funcionario -- define a tabela fonte dos dados. 
+group by numero_departamento;
 
 -- TO DO: adicionar restrições FK para cpf_supervisor e cpf_gerente
 alter table funcionario

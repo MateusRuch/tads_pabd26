@@ -1,6 +1,6 @@
-select * from funcionario;
+select * from funcionario; -- esse comando executa uma busca simples para retornar todos os dados de todas as colunas cadastradas na tabela selecionada.
 
-select pnome, unome, numero_departamento from funcionario;
+select pnome, unome, numero_departamento from funcionario; -- esse comando executa uma busca específica para retornar dados especificos da tabela selecionada.
 
 select pnome || ' ' || unome, numero_departamento from funcionario;
 

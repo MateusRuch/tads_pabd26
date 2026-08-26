@@ -53,6 +53,15 @@ WHERE table_schema = 'public'
 
 # 7. Comando úteis do psql
 
-Listar todas as tabelas: \dt
-Mostrar a descrição de uma tabela: \d TABELA
-Executar um arquivo: \i PATH
+Listar todas as tabelas: 
+```sql
+\dt
+```
+Mostrar a descrição de uma tabela: 
+```sql
+\d TABELA
+```
+Executar um arquivo: 
+```sql
+\i PATH
+```
