@@ -106,21 +106,70 @@ WHERE id NOT IN (
 );
 -- 6.	Liste todos os pedidos realizados nos últimos 30 dias.
 SELECT * FROM orders
+WHERE order_date >= now() -INTERVAL '30 days';
 
 -- 7.	Liste os pedidos e os respectivos nomes de usuário.
+SELECT user_id.orders AS users.name;
 
 -- 8.	Liste todos os usuários e seus pedidos, inclusive usuários sem pedidos.
-
+SELECT 
+    u.id AS user_id,
+    u.name AS user_name,
+    o.id AS order_id,
+    o.order_date,
+    o.status,
+    o.total
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id;
 -- 9.	Liste todos os usuários (id, nome e email) que realizaram pelo menos um pedido.
+SELECT DISTINCT u.id, u.name, u.email
+FROM users u
+JOIN orders o ON u.id = o.user_id;
 
 -- 10.	Liste produtos que nunca foram vendidos.
+SELECT p.id, p.name, p.price, p.stock
+FROM products p
+LEFT JOIN orders_products op ON p.id = op.product_id
+WHERE op.product_id IS NULL;
 
 -- 11.	Liste usuários que nunca realizaram pedidos.
+SELECT u.id, u.name, u.email
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+WHERE o.id IS NULL;
 
 -- 12.	Liste os produtos com preço acima da média em ordem decrescente.
+SELECT id, name, price
+FROM products
+WHERE price > (SELECT AVG(price) FROM products)
+ORDER BY price DESC;
 
 -- 13.	Liste a quantidade de pedidos realizados por cada usuário.
-
+SELECT 
+    u.id, 
+    u.name, 
+    COUNT(o.id) AS total_pedidos
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+GROUP BY u.id, u.name
+ORDER BY total_pedidos DESC;
 -- 14.	Listar os três produtos mais vendidos.
-
+SELECT 
+    p.id, 
+    p.name, 
+    SUM(op.quantity) AS total_vendido
+FROM products p
+JOIN orders_products op ON p.id = op.product_id
+GROUP BY p.id, p.name
+ORDER BY total_vendido DESC
+LIMIT 3;
 -- 15.	Gerar um relatório com: usuários, quantidade de pedidos e valor total comprado.
+SELECT 
+    u.id, 
+    u.name, 
+    COUNT(o.id) AS total_pedidos,
+    COALESCE(SUM(o.total), 0) AS valor_total
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+GROUP BY u.id, u.name
+ORDER BY valor_total DESC;
