@@ -99,12 +99,13 @@ WHERE name LIKE '%Dell%';
 DELETE FROM products 
 WHERE name LIKE '%Macbook%'
 -- 5.	Exclua um produto que não possua pedidos associados.
-DELETE * FROM products
+DELETE FROM products
 WHERE id NOT IN (
     SELECT product_id 
     FROM orders_products
 );
 -- 6.	Liste todos os pedidos realizados nos últimos 30 dias.
+SELECT * FROM orders
 
 -- 7.	Liste os pedidos e os respectivos nomes de usuário.
 
