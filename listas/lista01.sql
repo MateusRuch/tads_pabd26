@@ -83,22 +83,43 @@ INSERT INTO orders_products (order_id, product_id, quantity, unit_price) VALUES
     (10, 1, 1, 4500.00);
 
 -- 1.	Liste os produtos com preço superior a R$ 1000.
-SELECT * FROM products WHERE price > 1000.00;
+SELECT * FROM products 
+WHERE price > 1000.00;
+
 -- 2.	Liste os produtos ordenados pelo preço, do maior para o menor.
-SELECT * from products ORDER BY price DESC;
+SELECT * from products 
+ORDER BY price DESC;
+
 -- 3.	Aumente o preço de todos os produtos da `Dell` em 10%.
 UPDATE products 
 SET price = price * 1,10
 WHERE name LIKE '%Dell%';
+
 -- 4.	Exclua todos os produtos que sejam do tipo `Macbook`.
+DELETE FROM products 
+WHERE name LIKE '%Macbook%'
 -- 5.	Exclua um produto que não possua pedidos associados.
+DELETE * FROM products
+WHERE id NOT IN (
+    SELECT product_id 
+    FROM orders_products
+);
 -- 6.	Liste todos os pedidos realizados nos últimos 30 dias.
+
 -- 7.	Liste os pedidos e os respectivos nomes de usuário.
+
 -- 8.	Liste todos os usuários e seus pedidos, inclusive usuários sem pedidos.
+
 -- 9.	Liste todos os usuários (id, nome e email) que realizaram pelo menos um pedido.
+
 -- 10.	Liste produtos que nunca foram vendidos.
+
 -- 11.	Liste usuários que nunca realizaram pedidos.
+
 -- 12.	Liste os produtos com preço acima da média em ordem decrescente.
+
 -- 13.	Liste a quantidade de pedidos realizados por cada usuário.
+
 -- 14.	Listar os três produtos mais vendidos.
+
 -- 15.	Gerar um relatório com: usuários, quantidade de pedidos e valor total comprado.
