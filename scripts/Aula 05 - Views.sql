@@ -70,8 +70,71 @@ with CHECK OPTION;
 
 -- select * from v_products_in_stock;
 
-update v_products_in_stock
-set estoque = 0
-where id = 1
-returning id,produto,estoque;
+-- update v_products_in_stock
+-- set estoque = 0
+-- where id = 1
+-- returning id,produto,estoque;
 
+-- insert into v_products_int_stock (produto,valor,estoque)
+-- values ("Produto qualquer", 99, 0);
+
+-- MATERIALIZED VIEWS:
+
+-- 5. Relatório de produtos mais vendidos:
+
+drop view if exists v_top_products;
+create view v_top_products as
+select 
+    p.id id,
+    p.name produto,
+    sum(op.quantity) unid_vendidas,
+    sum(op.quantity * op.unit_price) totaL_vendido
+from products p
+join orders_products op on op.product_id = p.id
+join orders o on o.id = op.order_id
+where o.status <> 'canceled' 
+group by p.id, p.name;
+
+-- select * from v_top_products order by total_vendido desc limit 3;
+
+drop view if exists mv_top_products;
+create materialized view mv_top_products as
+select 
+    p.id id,
+    p.name produto,
+    sum(op.quantity) unid_vendidas,
+    sum(op.quantity * op.unit_price) totaL_vendido
+from products p
+join orders_products op on op.product_id = p.id
+join orders o on o.id = op.order_id
+where o.status <> 'canceled' 
+group by p.id, p.name
+with data; -- por padrão 
+-- with NO data; cria a materialized view sem dados, você terá que usar o refresh para atualizar os dados. 
+
+-- explain analyse select * from v_top_products order by total_vendido desc limit 3; para verificar a eficiencia/desempenho do comando. 
+
+-- 6. MV para mostrar o total vendido por mês:
+
+drop materialized view if exists mv_monthly_sales;
+create materialized view mv_monthly_sales as
+select
+    to_char(date_trunc('month', o.order_date),'YYYY/MM') mes,
+    sum(o.total) total_vendido
+from orders o
+where o.status <> 'canceled'
+group by mes
+with no data;
+
+-- select * from my_monthly_sales order by mes desc;
+
+refresh materialized view mv_monthly_sales; -- regarregando a MV.
+-- quando estamos dando refrash as consultas a essa MV fica desabilitada. 
+
+-- para garantir que o refresh não bloquee essa consulta deveremos escrever o código da seguinte forma:
+
+create unique index idx_mv_monthly_sales_month
+on mv_monthly_sales(mes);
+
+refresh materialized view concurrently mv_monthly_sales; -- é necessário criar um índice único.
+-- permite consultas durante o refresh.
